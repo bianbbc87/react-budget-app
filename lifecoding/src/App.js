@@ -1,36 +1,60 @@
 import './App.css';
 
-function Header() {
+function Article(props){
+  return  <article>
+  <h2> {props.title}</h2>
+  {props.body}
+</article>
+}
+
+function Header(props) {
+  console.log(`props`, props, props.title);
   return <header>
     <h1>
-        <a href="/"> WEB </a>
+        <a href="/" onClick={(event)=>{
+          event.preventDefault();
+          props.onChangeMode();
+        }}> WEB </a>
       </h1>
   </header>
 }
 
-function Nav(){
+function Nav(props){
+  const lis = []
+for(let i=0; i<props.topics.length; i++){
+  let t = props.topics[i];
+  lis.push(<li key={t.id}>
+    <a id={t.id} href = {'/read/'+t.id} onClick={(event)=>{
+      event.preventDefault();
+      props.onChangeMode(event.target.id);
+    }}>{t.title}</a>
+    </li>)
+}
   return <nav>
   <ol>
-    <li><a href="/read/1">html</a></li>
-    <li><a href="/read/1">css</a></li>
-    <li><a href="/read/1">js</a></li>
+    {lis}
   </ol>
 </nav>
 }
 
-function Article(){
-  return  <article>
-  <h2>Welcome</h2>
-  Hello, WEB
-</article>
-}
 
 function App() {
+  const topics = [
+    {id:1, title:'html', boy: 'html is ...'},
+    {id:2, title:'css', boy: 'css is ...'},
+    {id:3, title:'javascript', boy: 'css is ...'},
+
+  ]
+
   return (
    <div>
-    <Header></Header>
-    <Nav></Nav>
-    <Article></Article>
+    <Header title="WEB" onChangeMode={function(){
+      alert('Header');
+    }}></Header>
+    <Nav topics= {topics} onChangeMode={function(id){
+      alert(id);
+    }}></Nav>
+    <Article title="Welcome" body="Hello, Web"></Article>
    </div>
   );
 }
